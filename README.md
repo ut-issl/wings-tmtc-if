@@ -1,5 +1,5 @@
 # WINGS_TMTC_IF
-WINGS_TMTC_IF is an interface software for WINGS. It can connect COM port or IP port to WINGS.
+WINGS_TMTC_IF is an interface software for WINGS. It can connect COM port or IP port to [WINGS](https://github.com/ut-issl/wings).
 
 ## Getting Started for User
 ### Prerequisites
