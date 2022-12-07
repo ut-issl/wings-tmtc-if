@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using WINGS_TMTC_IF.Services;
 using WINGS_TMTC_IF.Services.MOBC;
+using WINGS_TMTC_IF.Services.SECONDARY_OBC;
 using WINGS_TMTC_IF.Services.IsslCommon;
 
 namespace WINGS_TMTC_IF
@@ -62,6 +63,13 @@ namespace WINGS_TMTC_IF
           services.AddSingleton<ITmPacketExtractor, MobcRfTmPacketExtractor>();
           services.AddSingleton<ITcPacketHandler, MobcRfTcPacketHandler>();
           configuration["SerialPort:BaudRate:Using"] = configuration["SerialPort:BaudRate:MOBC_RF"];
+          break;
+        
+        case "SECONDARY_OBC":
+          services.AddSingleton<IPortManager, SerialPortManager>();
+          services.AddSingleton<ITmPacketExtractor, SecondaryObcTmPacketExtractor>();
+          services.AddSingleton<ITcPacketHandler, SecondaryObcTcPacketHandler>();
+          configuration["SerialPort:BaudRate:Using"] = configuration["SerialPort:BaudRate:SECONDARY_OBC"];
           break;
 
         case "ISSL_COMMON":
