@@ -16,7 +16,7 @@ namespace WINGS_TMTC_IF
       var services = ConfigureServices();
 
       var serviceProvider = services.BuildServiceProvider();
-      
+
       serviceProvider.GetService<App>().Run();
     }
 
@@ -32,7 +32,7 @@ namespace WINGS_TMTC_IF
       services.AddTransient<TmtcPacketService>();
 
       ConfigureUserDefinedServices(services, configuration);
-      
+
       return services;
     }
 
@@ -48,7 +48,7 @@ namespace WINGS_TMTC_IF
     private static void ConfigureUserDefinedServices(IServiceCollection services, IConfiguration configuration)
     {
       var component = ConsoleSelectComponent(configuration);
-      
+
       switch (component)
       {
         case "MOBC_UART":
@@ -57,14 +57,14 @@ namespace WINGS_TMTC_IF
           services.AddSingleton<ITcPacketHandler, MobcUartTcPacketHandler>();
           configuration["SerialPort:BaudRate:Using"] = configuration["SerialPort:BaudRate:MOBC_UART"];
           break;
-        
+
         case "MOBC_RF":
           services.AddSingleton<IPortManager, LanPortManager>();
           services.AddSingleton<ITmPacketExtractor, MobcRfTmPacketExtractor>();
           services.AddSingleton<ITcPacketHandler, MobcRfTcPacketHandler>();
           configuration["SerialPort:BaudRate:Using"] = configuration["SerialPort:BaudRate:MOBC_RF"];
           break;
-        
+
         case "SECONDARY_OBC":
           services.AddSingleton<IPortManager, SerialPortManager>();
           services.AddSingleton<ITmPacketExtractor, SecondaryObcTmPacketExtractor>();
@@ -76,7 +76,7 @@ namespace WINGS_TMTC_IF
           services.AddSingleton<IPortManager, SerialPortManager>();
           services.AddSingleton<ITmPacketExtractor, IsslCommonTmPacketExtractor>();
           services.AddSingleton<ITcPacketHandler, IsslCommonTcPacketHandler>();
-          configuration["SerialPort:BaudRate:Using"] = configuration["SerialPort:BaudRate:MIF"];
+          configuration["SerialPort:BaudRate:Using"] = configuration["SerialPort:BaudRate:ISSL_COMMON"];
           break;
 
         default:

@@ -6,11 +6,12 @@ namespace WINGS_TMTC_IF.Services.SECONDARY_OBC
 {
   public class SecondaryObcTmPacketExtractor : TmPacketExtractorBase, ITmPacketExtractor
   {
-    private static readonly byte[] STX = new byte[]{0xeb, 0x90};
-    private static readonly byte[] ETX = new byte[]{0xc5, 0x79};
+    private static readonly byte[] STX = new byte[] { 0xeb, 0x90 };
+    private static readonly byte[] ETX = new byte[] { 0xc5, 0x79 };
 
     public SecondaryObcTmPacketExtractor(IPortManager portManager)
-      : base(portManager, new ReceivedDataConfig {
+      : base(portManager, new ReceivedDataConfig
+      {
         HeaderLength = 4,
         BodyLength = 6 + 7 + 223,
         FooterLength = 4
@@ -28,9 +29,9 @@ namespace WINGS_TMTC_IF.Services.SECONDARY_OBC
       if (BitConverter.IsLittleEndian)
       {
         Array.Reverse(packet_tmp);
-      }        
+      }
       _config.BodyLength = BitConverter.ToUInt16(packet_tmp);
-            
+
       return true;
     }
 
