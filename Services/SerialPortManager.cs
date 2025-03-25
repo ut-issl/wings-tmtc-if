@@ -31,7 +31,7 @@ namespace WINGS_TMTC_IF.Services
     public void Initialize()
     {
       var portNames = SerialPort.GetPortNames()
-              .Where(name => name.Contains("COM") || name.Contains("tty.usb"))
+              .Where(name => name.Contains("COM") || name.Contains("tty.usb") || name.Contains("ttyUSB"))
               .ToArray();
       var portName = ((IPortManager)this).ConsoleSelectValue("serial port", portNames);
       Console.WriteLine("Open {0}...", portName);

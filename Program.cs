@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using WINGS_TMTC_IF.Services;
 using WINGS_TMTC_IF.Services.MOBC;
+using WINGS_TMTC_IF.Services.SECONDARY_OBC;
 using WINGS_TMTC_IF.Services.IsslCommon;
 
 namespace WINGS_TMTC_IF
@@ -15,7 +16,7 @@ namespace WINGS_TMTC_IF
       var services = ConfigureServices();
 
       var serviceProvider = services.BuildServiceProvider();
-      
+
       serviceProvider.GetService<App>().Run();
     }
 
@@ -31,7 +32,7 @@ namespace WINGS_TMTC_IF
       services.AddTransient<TmtcPacketService>();
 
       ConfigureUserDefinedServices(services, configuration);
-      
+
       return services;
     }
 
@@ -47,7 +48,7 @@ namespace WINGS_TMTC_IF
     private static void ConfigureUserDefinedServices(IServiceCollection services, IConfiguration configuration)
     {
       var component = ConsoleSelectComponent(configuration);
-      
+
       switch (component)
       {
         case "MOBC_UART":
@@ -56,7 +57,7 @@ namespace WINGS_TMTC_IF
           services.AddSingleton<ITcPacketHandler, MobcUartTcPacketHandler>();
           configuration["SerialPort:BaudRate:Using"] = configuration["SerialPort:BaudRate:MOBC_UART"];
           break;
-        
+
         case "MOBC_RF":
           services.AddSingleton<IPortManager, LanPortManager>();
           services.AddSingleton<ITmPacketExtractor, MobcRfTmPacketExtractor>();
@@ -64,11 +65,18 @@ namespace WINGS_TMTC_IF
           configuration["SerialPort:BaudRate:Using"] = configuration["SerialPort:BaudRate:MOBC_RF"];
           break;
 
+        case "SECONDARY_OBC":
+          services.AddSingleton<IPortManager, SerialPortManager>();
+          services.AddSingleton<ITmPacketExtractor, SecondaryObcTmPacketExtractor>();
+          services.AddSingleton<ITcPacketHandler, SecondaryObcTcPacketHandler>();
+          configuration["SerialPort:BaudRate:Using"] = configuration["SerialPort:BaudRate:SECONDARY_OBC"];
+          break;
+
         case "ISSL_COMMON":
           services.AddSingleton<IPortManager, SerialPortManager>();
           services.AddSingleton<ITmPacketExtractor, IsslCommonTmPacketExtractor>();
           services.AddSingleton<ITcPacketHandler, IsslCommonTcPacketHandler>();
-          configuration["SerialPort:BaudRate:Using"] = configuration["SerialPort:BaudRate:MIF"];
+          configuration["SerialPort:BaudRate:Using"] = configuration["SerialPort:BaudRate:ISSL_COMMON"];
           break;
 
         default:
